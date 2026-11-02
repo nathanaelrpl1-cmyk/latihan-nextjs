@@ -1,0 +1,8 @@
+export default function Tentang() {
+    return (
+        <div>
+            <h1 className="text-2xl font-bold">Tentang Eventku</h1>
+            <p className="mt-2 text-slate-600">Eventku dibuat oleh siswa RPL untuk memudahkann pemesanan tiket event sekolah.</p>
+        </div>
+    );
+}
