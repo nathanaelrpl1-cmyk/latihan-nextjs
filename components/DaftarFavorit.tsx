@@ -32,7 +32,7 @@ export default function DaftarFavorit() {
         <ul className="space-y-2">
             {daftar.map((e) => (
                 <li key={e.id}>
-                    <Link href={`/event/${e.id}`} className="text-blue-600 hover:underline">
+                    <Link href={`/events/${e.id}`} className="text-blue-600 hover:underline">
                         <span className="font-medium">{e.judul}</span>
                         <span className="text-blue-600 font-semibold">{rupiah(e.harga)}</span>
                     </Link>
