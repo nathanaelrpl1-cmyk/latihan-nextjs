@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { pesanan } from "@/data/pesanan";
-import { rupiah } from "@/data/event";
+import { rupiah } from "@/data/events";
 import { batalkanPesanan } from "@/app/actions";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pesanan",
+};
 
 export default async function HalamanPesanan() {
   const cookieStore = await cookies();
@@ -22,12 +27,16 @@ export default async function HalamanPesanan() {
 
       {pesanan.length === 0 ? (
         <p className="text-slate-500">
-          Belum ada pesanan. <Link href="/events" className="text-blue-600 underline">Pilih event</Link>
+          Belum ada pesanan.{" "}
+          <Link href="/events" className="text-blue-600 underline">
+            Pilih event
+          </Link>
         </p>
       ) : (
         <>
           <p className="mb-3 text-sm text-slate-500">
-            {pesanan.length} pesanan · {totalTiket} tiket · pendapatan {rupiah(pendapatan)}
+            {pesanan.length} pesanan · {totalTiket} tiket · pendapatan{" "}
+            {rupiah(pendapatan)}
           </p>
           <table className="w-full rounded-xl border bg-white text-sm">
             <thead className="bg-slate-100 text-left">
@@ -61,7 +70,9 @@ export default async function HalamanPesanan() {
                       {adalahMilikSaya && (
                         <form action={batalkanPesanan}>
                           <input type="hidden" name="nomor" value={p.nomor} />
-                          <button className="text-red-600 underline">Batalkan</button>
+                          <button className="text-red-600 underline">
+                            Batalkan
+                          </button>
                         </form>
                       )}
                     </td>
