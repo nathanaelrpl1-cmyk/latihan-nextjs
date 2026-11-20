@@ -1,15 +1,23 @@
-import { events } from "@/data/events";
+import { NextResponse } from "next/server";
+import { ambilEvent } from "@/data/ambil";
+
+type RouteContext = {
+  params: Promise<{ id: string }>;
+};
 
 export async function GET(
   _request: Request,
-  context: RouteContext<"/api/events/[id]">,
+  context: RouteContext
 ) {
   const { id } = await context.params;
-  const event = events.find((item) => item.id === Number(id));
+  const eventId = Number(id);
+  
+  // Memanggil fungsi ambilEvent dari @/data/ambil untuk query ke Supabase
+  const event = await ambilEvent(eventId);
 
   if (!event) {
-    return Response.json({ pesan: "Event tidak ditemukan" }, { status: 404 });
+    return NextResponse.json({ pesan: "Event tidak ditemukan" }, { status: 404 });
   }
 
-  return Response.json(event);
+  return NextResponse.json(event);
 }

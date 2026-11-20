@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { events, rupiah } from "@/data/events";
-import { ambilEvent } from "@/data/ambil";
+import { rupiah } from "@/data/events";
+import { ambilEvent, hitungPesanan, totalTiketDipesan } from "@/data/ambil";
 import FormPesan from "@/components/FormPesan";
 import TombolFavorit from "@/components/TombolFavorit";
 import { cookies } from "next/headers";
@@ -13,7 +13,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/events/[id]">): Promise<Metadata> {
   const { id } = await params;
-  const event = events.find((e) => e.id === Number(id));
+  const event = await ambilEvent(Number(id));
   if (!event) return { title: "Event tidak ditemukan" };
   return {
     title: event.judul,
@@ -26,6 +26,8 @@ export default async function Detail({ params }: PageProps<"/events/[id]">) {
   const event = await ambilEvent(Number(id));
   if (!event) notFound();
 
+  const jumlahPesanan = await hitungPesanan(event.id);
+  const totalTiket = await totalTiketDipesan(event.id);
   const sisa = event.kuota - event.terisi;
 
   const namaAwal = (await cookies()).get("nama")?.value ?? "";
@@ -51,6 +53,9 @@ export default async function Detail({ params }: PageProps<"/events/[id]">) {
       <p className="mt-4 text-xl font-semibold">{rupiah(event.harga)}</p>
       <p className="text-slate-600">
         Sisa {sisa} dari {event.kuota} tiket
+      </p>
+      <p className="text-sm text-slate-500">
+        {jumlahPesanan} pesanan ({totalTiket} tiket) masuk lewat Eventku
       </p>
       <TombolFavorit id={event.id} />
       <FormPesan event={event} namaAwal={namaAwal} />
